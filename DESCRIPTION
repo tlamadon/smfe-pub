@@ -1,0 +1,38 @@
+Package: smfe
+Title: Estimates the size of firm effects on a range of countries
+Version: 0.0.0.9000
+Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
+Description: What the package does (one paragraph).
+Imports: data.table
+Depends: R (>= 3.3.0), 
+  rmutil,
+  data.table,
+  plyr,
+  SDMTools,
+  futile.logger,
+  Matrix,
+  reshape2,
+  SparseM,
+  stringr,
+  FactoClass,
+  magrittr,
+  Hmisc,
+  quadprog,
+  pracma,
+  rmutil,
+  checkmate,
+  e1071,
+  MASS,
+  lfe,
+  igraph,
+  haven
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests:
+    testthat,
+    parallel,
+    sparseutils,
+    ggm,
+    akm
