@@ -155,7 +155,7 @@ Do.Country.Paths <- function(country){
 
   # SW------------------------------------------------------------------------
   if (substr(country,1,2) == "SW") {
-    library(akm)
+#     library(akm)
     paths$data  <- sprintf("../smfe-res-%s/",country)
     paths$res   <- sprintf("../smfe-res-%s/",country)
     paths$final <- sprintf("../smfe-res-%s/",country)
@@ -164,7 +164,7 @@ Do.Country.Paths <- function(country){
 
   # Sweden for attrition
   if (country=='SW-attrition'){
-    library(akm)
+#     library(akm)
     paths$data  <- "../tmp2/data/"
     paths$res   <- "../tmp2/tmp/"
     paths$final <- "../tmp2/final/"
