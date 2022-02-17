@@ -97,10 +97,12 @@ Do.Country.Paths <- function(country){
   if  (grepl('AT', country) | grepl('IT', country)){
       setwd(path)
       proj_path=dirname(dirname(path))
-      if grepl('IT', country) {
+      if (grepl('IT', country)) {
          paths$raw<-paste0(proj_path, "/Data_IT/py_final_1985_2001_veneto_only.dta")
-      } else if ((grepl('AT', country))) {
+      } else {
+        if ((grepl('AT', country))) {
          paths$raw<-paste0(proj_path, "/Data_AT/Raw/anadata.dta")
+        }
       }
     paths$prog  = paste0(proj_path, "/smfe/smfe/R/") #where the programs are in
     paths$call  = paste0(proj_path, "/smfe/smfe/inst/server-scripts/") # where the run script is in
