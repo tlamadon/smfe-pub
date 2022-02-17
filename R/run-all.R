@@ -342,156 +342,57 @@ Do.load.raw.data <- function(opts){
 
   # AT---------------
   if ( (grepl('AT', opts$country))) {
+    #Loading data
     dta<-read_dta(opts$paths$raw)
-    #Keep only certain vars
-    df = dta[,!(names(dta) %in% c("enddat","stag", "e_st", "am_change", "krz_geld", "oc", "od_nace", "ort", "old_rgs", "old_dur", "old_statusdauer", "old_tag", "avg_bmg", "avg_days", "s_avg_bmg", "s_avg_days", "month",  "cpi", "days_2"))]
-    df<-setDT(df)
-    df=df[, list(sex=df$sex,days_worked=df$days_worked, worker_ID=df$cod_pgr,year=df$anno,firm_ID=df$matr_az,age=df$age,wages=df$lwage, days=df$days_worked, sex=df$sex, partt=df$partt, krz=df$krz)];
+    df<-setDT(dta)
+    df=df[, list(sex=df$sex,days_worked=df$days_worked, worker_ID=df$cod_pgr,year=df$anno,firm_ID=df$matr_az,age=df$age,wages=df$lwage)];
     wdata %<>% rbind(df)
-    wdata=wdata[(wdata$age>=25) & (wdata$age<=60)] # age limitsas in US
+    wdata=wdata[(wdata$age>=25) & (wdata$age<=60)] # age limits as in US
     wdata$earnings<-exp(wdata$wages)*wdata$days_worked
     #Restrictions
     #Duration
     if (grepl('6', country)) {
-    wdata=wdata[(wdata$year>=2010) & (wdata$year<=2015) ] # 6 years as in US
+      wdata=wdata[(wdata$year>=2010) & (wdata$year<=2015) ] # 6 years 
     } else if (grepl('3', country))  {
-    wdata=wdata[(wdata$year>=2013) & (wdata$year<=2015) ] # 3 years as in US
-    }
-    #Full-Year Work
-    if (grepl('full', country)) {
-      wdata=wdata[wdata$days_worked>=365]
+      wdata=wdata[(wdata$year>=2013) & (wdata$year<=2015) ] # 3 years 
     }
     floor=mean(wdata$earnings, na.rm = TRUE)*0.325 ;
-    #With Threshold or not
+    #Earnings Threshold
     if (grepl('thresh', country)) {
        wdata=wdata[wdata$earnings>floor] # same restriction as US
     }
     wdata<-wdata[!((wdata$wages=="NA") | (wdata$wages<=-Inf) | (wdata$age=="NA") | (wdata$year=="NA") | (wdata$worker_ID=="NA") | (wdata$firm_ID=="NA")),]  # delete missing obs
     wdata$firm_ID<-as.numeric(factor(rank(wdata$firm_ID))) #convert due to large ID
-    #Plot of quantiles
-    #quants=quantile(wdata$wages, probs = seq(0, 1, 0.001), na.rm = T,  names = TRUE, type = 7)
-    #quants=quantile(wdata$earnings, probs = seq(0, 1, 0.001), na.rm = T,  names = TRUE, type = 7)
-    #wdata$quartile= cut(wdata$earnings, quantile(wdata$earnings, probs = seq(0, 1, 0.01), na.rm=T))
-    #days=wdata[, mean(days_worked,na.rm=T), by=quartile]
-    #earnings=wdata[, mean(earnings,na.rm=T), by=quartile]
-    #plot(seq(0,1,.001)*100, quants, xlab='Quantiles', ylab='Log Wage')
-    #plot(earnings$V1, days$V1, xlab='Earnings', ylab='Days')
-    #abline(v=floor, col="purple")
-    #wdata[,Ij:=rowid(firm_ID, year)]
-    #wdata[,mw:=.N,by=.(firm_ID,year)]
-    #wdata$ft[wdata$days_worked>=365]=1
-    #wdata$ft[wdata$days_worked<365]=0
-    #wdata$female=0
-    #wdata$female[wdata$sex=="F"]=1
-    #stats=wdata[, list(size=mean(mw), ft=mean(ft,na.rm=T),earnings=mean(earnings,na.rm=T), mage=mean(age,na.rm=T),days=mean(days_worked, na.rm=T),mfem=mean(female, na.rm=T) ), by=.(quartile)]
-    #plot(seq(0,1,.001)*100, quants, xlab='Quantiles', ylab='Log Wage')
-    #plot(earnings$V1, days$V1, xlab='Earnings', ylab='Days')
-    #abline(v=floor, col="purple")
-    #par(mfrow=c(2,2))
-    #plot(stats$earnings, stats$days, xlab='Earnings', ylab='Days')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$mage, xlab='Earnings', ylab='Age')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$mfem*100, xlab='Earnings', ylab='Female, %')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$size, xlab='Earnings', ylab='Firm Size')
-    #abline(v=floor, col="purple")
-    #par(mfrow=c(3,2))
-    #plot(stats$earnings, stats$days, xlab='Earnings', ylab='Days')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$mage, xlab='Earnings', ylab='Age')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$mfem*100, xlab='Earnings', ylab='Female, %')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$size, xlab='Earnings', ylab='Firm Size')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$ft, xlab='Earnings', ylab='Full-Year, %')
-    #abline(v=floor, col="purple")
-
-
   }
 
   # IT---------------
   if ( (grepl('IT', opts$country)) & (grepl('ITKline', opts$country)==0) ){
+    #Loading data
     dta<-read_dta(opts$paths$raw)
-    #Keep only certain vars
-    df = dta[,(names(dta) %in% c("partt", "gior_r", "ateco81","daily_wage", "year", "id", "firmid", "age", "BelRo", "fullt", "female", "prov_r2", "exc_many", "exc_sec", "exc_ch_wage", "exc_Kline"))]
-    df<-setDT(df)
-    df=df[, list(partt=df$partt, gior_r=df$gior_r, days=df$gior_r, worker_ID=df$id,year=df$year,firm_ID=df$firmid,age=df$age,wages=log(df$daily_wage), ft=df$fullt, female=df$female, prov_r2=df$prov_r2, exc_many=df$exc_many, exc_sec=df$exc_sec, exc_ch_wage=df$exc_ch_wage, exc_Kline=df$exc_Kline)];
+    df<-setDT(dta)
+    df=df[, list(female=df$female, days_worked=df$gior_r, worker_ID=df$id, year=df$year,firm_ID=df$firmid,age=df$age,wages=log(df$daily_wage), )];
     wdata %<>% rbind(df)
     wdata=wdata[(wdata$age>=25) & (wdata$age<=60)] # age restriction
-    wdata=wdata[(wdata$gior_r<=366)] # cleaning data
-    wdata$earnings<-exp(wdata$wages)*wdata$gior_r
+    wdata=wdata[(wdata$days_worked<=366)] # cleaning data
+    wdata$earnings<-exp(wdata$wages)*wdata$days_worked
     #Restrictions
     #Duration
     if (grepl('6', country)) {
-        wdata=wdata[(wdata$year>=1996) ] # 6 years as in US
+        wdata=wdata[(wdata$year>=1996) ] # 6 years 
     } else if (grepl('3', country))  {
-        wdata=wdata[(wdata$year>=1999  ) ] # 3 years as in US
+        wdata=wdata[(wdata$year>=1999  ) ] # 3 years 
     }
-    #if (grepl('ITKline', country)==F) {
-        #Full-Year Work
-        if (grepl('full', country)) {
-          wdata=wdata[wdata$gior_r>=312]
-        }
-        #Universe or not
-        if (grepl('uni', country)){
-          wdata=wdata[(wdata$prov_r2=="VE" | wdata$prov_r2=="TV")]  # keep only where all coworkers are observed
-        }
-        floor=mean(wdata$earnings, na.rm = TRUE)*0.325 ;
-        #With Threshold or not
-        if (grepl('thresh', country)) {
-           wdata=wdata[wdata$earnings>floor] # same restriction as US
-        }
-        #Men only
-        if (grepl('men', country)) {
-           wdata=wdata[wdata$female==0] # only men, Kline
-        }
-        if (grepl('large', country)) {
-          wdata[,N:=.N,by=.(year,firm_ID)]
-          wdata[,min_N:=min(N),by=firm_ID]
-          wdata=wdata[min_N>=20]
-        }
-    #} else if  (grepl('ITKline', country)) {
-     #  wdata=wdata[(wdata$exc_Kline!=1) ] # Kline exclusions
-    #   wdata=wdata[wdata$wages>=log(5)] # lower floor, same restriction as Kline
-   #    lM <- lm(wages ~ factor(year), data=wdata) #residualization only year effects
-  #     wdata[, wages_residual :=  wages-predict(lM)]
- #      wdata[, wages_predict := wages - (wages-predict(lM))]
-#    }
+    floor=mean(wdata$earnings, na.rm = TRUE)*0.325 ;
+    #Earnings Threshold
+    if (grepl('thresh', country)) {
+       wdata=wdata[wdata$earnings>floor] # same restriction as US
+    }
     wdata$firm_ID<-as.numeric(factor(rank(wdata$firm_ID))) #convert due to large ID
     wdata<-wdata[!((wdata$wages=="NA") | (wdata$wages<=-Inf) | (wdata$age=="NA") | (wdata$year=="NA") | (wdata$worker_ID=="NA") | (wdata$firm_ID=="NA")),]  # delete missing obs
-    #Figure of quantiles
-    #quants=quantile(wdata$wages, probs = seq(0, 1, 0.001), na.rm = FALSE,  names = TRUE, type = 7)
-    #plot(seq(0,1,.001)*100, quants, xlab='Quantiles', ylab='Log Wage')
-    #Variance
-    #var(wdata$wages)
-    #Plot of quantiles
-    #quants=quantile(wdata$earnings, probs = seq(0, 1, 0.001), na.rm = T,  names = TRUE, type = 7)
-    #wdata$quartile= cut(wdata$earnings, quantile(wdata$earnings, probs = seq(0, 1, 0.01), na.rm=T))
-    #days=wdata[, mean(gior_r,na.rm=T), by=quartile]
-    #earnings=wdata[, mean(earnings,na.rm=T), by=quartile]
-    #wdata[,Ij:=rowid(firm_ID,year)]
-    #wdata[,mw:=.N,by=.(firm_ID, year)]
-    #stats=wdata[, list(size=mean(mw), ft=mean(ft,na.rm=T),earnings=mean(earnings,na.rm=T), mage=mean(age,na.rm=T),days=mean(gior_r, na.rm=T),mfem=mean(female, na.rm=T) ), by=.(quartile)]
-    #plot(seq(0,1,.001)*100, quants, xlab='Quantiles', ylab='Log Wage')
-    #plot(earnings$V1, days$V1, xlab='Earnings', ylab='Days')
-    #abline(v=floor, col="purple")
-    #par(mfrow=c(3,2))
-    #plot(stats$earnings, stats$days, xlab='Earnings', ylab='Days')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$mage, xlab='Earnings', ylab='Age')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$mfem*100, xlab='Earnings', ylab='Female, %')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$size, xlab='Earnings', ylab='Firm Size')
-    #abline(v=floor, col="purple")
-    #plot(stats$earnings, stats$ft, xlab='Earnings', ylab='Full-Year, %')
-    #abline(v=floor, col="purple")
   }
 
-    # ITKline---------------
-  if ( (grepl('ITKline', opts$country))  ){
+  # ITKline---------------
+  if (grepl('ITKline', opts$country)) {
     dta<-read_dta(opts$paths$raw)
     #Keep only certain vars but keep data as is otherwise
     df = dta[,(names(dta) %in% c("log_dailywages", "year", "id", "firmidnew", "age"))]
@@ -506,83 +407,7 @@ Do.load.raw.data <- function(opts){
     wdata<-wdata[!((wdata$wages=="NA") | (wdata$wages<=-Inf) | (wdata$age=="NA") | (wdata$year=="NA") | (wdata$worker_ID=="NA") | (wdata$firm_ID=="NA")),]  # delete missing obs
   }
 
-
-  # IT - Tibo ---------------
-  if ( substr(opts$country,1,2) == "IY"  ){
-    dta<-read_dta(opts$paths$raw)
-
-    #Keep only certain vars
-    df = dta[,(names(dta) %in% c("partt", "gior_r", "ateco81","daily_wage", "year", "id", "firmid", "age", "BelRo", "fullt", "female", "prov_r2", "exc_many", "exc_sec", "exc_ch_wage", "exc_Kline"))]
-    df<-setDT(df)
-
-    wdata=df[, list(partt=df$partt, gior_r=df$gior_r, days=df$gior_r, worker_ID=df$id,year=df$year,firm_ID=df$firmid,age=df$age,wages=log(df$daily_wage), ft=df$fullt, female=df$female, prov_r2=df$prov_r2, exc_many=df$exc_many, exc_sec=df$exc_sec, exc_ch_wage=df$exc_ch_wage, exc_Kline=df$exc_Kline)];
-
-    # some filtering
-    wdata=wdata[(wdata$age>=25) & (wdata$age<=60)] # age restriction
-    wdata=wdata[(wdata$gior_r<=366)] # cleaning data
-    wdata$earnings<-exp(wdata$wages)*wdata$gior_r
-
-    # final filtering
-    wdata$firm_ID<-as.numeric(factor(rank(wdata$firm_ID))) #convert due to large ID
-    wdata<-wdata[!((wdata$wages=="NA") | (wdata$wages<=-Inf) | (wdata$age=="NA") | (wdata$year=="NA") | (wdata$worker_ID=="NA") | (wdata$firm_ID=="NA")),]  # delete missing obs
-  }
-
-
-  #ES---------------
-  if (opts$country=='ES'){
-    dta<-read_dta(opts$paths$raw)
-    #Keep only certain vars
-    df = dta[,(names(dta) %in% c( "id_full", "contract_parttime", "lwage","age", "year", "cod_pgr", "matr_az", "anno"))]
-    #    df = dta[,(names(dta) %in% c("qrt", "id_full", "contract_parttime", "lwage","age", "year", "cod_pgr", "matr_az", "anno"))]
-    df<-setDT(df)
-    #    df=df[, list(qrt=df$qrt, id_full=df$id_full, contract_parttime=df$contract_parttime, worker_ID=df$cod_pgr,year=df$anno,firm_ID=df$matr_az,age=df$age,wages=df$lwage)];
-    df=df[, list( id_full=df$id_full, contract_parttime=df$contract_parttime, worker_ID=df$cod_pgr,year=df$anno,firm_ID=df$matr_az,age=df$age,wages=df$lwage)];
-    wdata=data.table()
-    wdata %<>% rbind(df)
-    if (opts$misc$connectivity==FALSE) {
-    wdata=wdata[(wdata$year==2004)| (wdata$year==2009)] # only one year keep
-    }
-    #    wdata=wdata[(wdata$year==2004 & wdata$qrt==4)| (wdata$year==2006 & wdata$qrt==1)] # only one year keep
-    #wdata=wdata[wdata$wages>log(5)] # same restriction as IT lower floor
-    floor=quantile(wdata$wages, c(.278)) ;
-    wdata=wdata[wdata$wages>floor] # same restriction as IT lower floor
-    #wdata=wdata[(wdata$age>18) & (wdata$age<64)] # as in IT-Kline
-    wdata=wdata[(wdata$age>=25) & (wdata$age<=60)] # as in US
-   #wdata=wdata[wdata$id_full==1]
-    #wdata=wdata[wdata$contract_parttime==0]
-    wdata<-wdata[!((wdata$wages=="NA") | (wdata$age=="NA") | (wdata$year=="NA") | (wdata$worker_ID=="NA") | (wdata$firm_ID=="NA")),]  # delete missing obs
-    wdata$firm_ID<-as.numeric(factor(rank(wdata$firm_ID))) #convert due to large ID
-  }
-
-  # DE---------------
-  if ((opts$country=='DE-test') | (opts$country=='DE')) {
-    if (opts$country=='DE-test')  {
-      wdata <- data.table()
-      wdata <- Do.simulate.test.data(workers=10000,firms=1000)
-    }
-    if ((opts$country=='DE')) {
-      opts$paths$raw<-paste0(opts$paths$data, "all_10_2.dta")
-      #this is the raw data
-      dta<-read_dta(opts$paths$raw)
-      #Keep only certain vars
-      df = dta[,(names(dta) %in% c("persnr","betnr", "frau", "age",  "lwage", "dur", "anno" ))]
-      df<-setDT(df)
-      df=df[, list(worker_ID=df$persnr,firm_ID=df$betnr,age=df$age,wages=df$lwage, dur=df$dur, year=df$anno)];
-      wdata <- data.table()
-      wdata %<>% rbind(df)
-      #Restrictions
-      wdata$wages[!is.finite(wdata$wages)] <- NA
-      wdata=wdata[(wdata$year==2004) | (wdata$year==2006) ] # only one year keep around 2005
-      wdata=wdata[(wdata$dur==365) | (wdata$dur==364) | (wdata$dur==366)] # full year work
-      wdata<-wdata[!((wdata$wages=="NA") | (wdata$age=="NA") | (wdata$year=="NA") | (wdata$worker_ID=="NA") | (wdata$firm_ID=="NA")),]  # delete missing obs
-      #wdata$firm_ID<-as.numeric(factor(rank(wdata$firm_ID))) #convert due to large ID
-      #wdata$worker_ID<-as.numeric(factor(rank(wdata$worker_ID))) #convert due to large ID
-      #    wdata=wdata[(wdata$age>18) & (wdata$age<64)] # as in IT-Kline
-      wdata=wdata[(wdata$age>=25) & (wdata$age<=60)] # as in US
-      wdata=wdata[wdata$wages>log(5)] # same restriction as IT lower floor
-    }
-  }
-
+  
   # SW all samples ---------------
   if ( substr(opts$country,1,2) == "SW"  ){
     load("L:\\Tibo\\qtrdata\\smfe-data-all.dat")

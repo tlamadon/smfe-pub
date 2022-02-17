@@ -42,7 +42,7 @@ Do.Country.Suffix <- function(country){
   }
 
   # AT, IT, IT_Kline
-  if((country=='AT') | (country=='IT') | (country=='IT_Kline')){
+  if ((country=='AT') | (country=='IT')){
     # use defaults
   }
 
@@ -95,21 +95,22 @@ Do.Country.Paths <- function(country){
 
   # AT, IT-------------------------------------------------------
   if  (grepl('AT', country) | grepl('IT', country)){
-      setwd(path)
-      proj_path=dirname(dirname(path))
-      if (grepl('IT', country)) {
-         paths$raw<-paste0(proj_path, "/Data_IT/py_final_1985_2001_veneto_only.dta")
-      } else {
-        if ((grepl('AT', country))) {
-         paths$raw<-paste0(proj_path, "/Data_AT/Raw/anadata.dta")
-        }
-      }
-    paths$prog  = paste0(proj_path, "/smfe/smfe/R/") #where the programs are in
-    paths$call  = paste0(proj_path, "/smfe/smfe/inst/server-scripts/") # where the run script is in
-    paths$pkg  = paste0(proj_path, "/Packages/") #where the packages are stored
-    paths$files  = paste0(proj_path, "/Files/") #where the packages are being installed in
-    paths$final = paste0(proj_path, "/smfe/smfe/inst/local-res/")
-    paths$attrition=paths$res
+    path<-"/mnt/ide0/home/kholzheu/smfe/smfe/"
+    proj_path=dirname(path)
+    if (grepl('IT', country)) {
+       paths$raw<-paste0(proj_path, "/Data_IT/1985_2001_veneto.dta")
+       if (grepl('ITKline', country)) {
+           paths$raw<-paste0(proj_path, "/Data_IT/All_Veneto_1999and2001_T_equal_2.dta") 
+       }
+    } 
+    if (grepl('AT', country)) {
+       paths$raw<-paste0(proj_path, "/Data_AT/2001_2017_austria.dta")
+    }
+    paths$prog  = paste0(proj_path, "/smfe/R/") #where the programs are in
+    paths$data  = paste0(proj_path,'/smfe-res-',country, '/')
+    paths$res   = paths$data
+    paths$final = paths$data
+    paths$attrition=paths$data
   }
 
   # SW------------------------------------------------------------------------
