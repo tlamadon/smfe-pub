@@ -1,6 +1,6 @@
 Package: smfe
-Title: Estimates the size of firm effects on a range of countries
-Version: 0.0.0.9000
+Title: Prepare data for firm effect estimation for a range of countries
+Version: 1.0
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Imports: data.table
@@ -19,7 +19,6 @@ Depends: R (>= 3.3.0),
   Hmisc,
   quadprog,
   pracma,
-  rmutil,
   checkmate,
   e1071,
   MASS,
