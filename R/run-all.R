@@ -777,31 +777,7 @@ Do.jdata_sdata.cluster <- function(nclus = 10, suffix, opts) {
     }
   }
 
-
   ad <- Do.reading.jdata_sdata(directory_Data = opts$paths$data, suffix = suffix, data_type = opts$loading$data_type, opts)
-
-  # if(opts$misc$mover_cluster_max_share > 0){
-  #   ns <- ad$sdata[,length(unique(wid))]
-  #   nm <- ad$jdata[,length(unique(wid))]
-  #   flog.info("share %s are movers",nm/(nm+ns))
-  #   holdout_movers = 1-pmin(  opts$misc$mover_cluster_max_share*(nm+ns)/nm , 1)
-  #   if(holdout_movers > 0){
-  #     flog.info("share %s of movers will be moved from jdata to sdata when clustering",holdout_movers)
-  #     # separate out the hold-out set of movers
-  #     ad$jdata[, holdout_index := runif(1), wid]
-  #     holdout_sdata <- ad$jdata[holdout_index < holdout_movers]
-  #     ad$jdata <- ad$jdata[holdout_index >= holdout_movers]
-  #     ad$jdata[, holdout_index := NULL]
-  #     # reshape the hold-out set of movers to match sdata-format, then put in sdata
-  #     holdout_sdata <- unique(holdout_sdata[,list(wid,f1=f1,f2=f1,y1=y1,y2=y1,spell_length=spell_length)])
-  #     ad$sdata <- rbind(ad$sdata,holdout_sdata)
-  #     # verify that it worked
-  #     ns <- ad$sdata[,length(unique(wid))]
-  #     nm <- ad$jdata[,length(unique(wid))]
-  #     flog.info("share %s are movers",nm/(nm+ns))
-  #   }
-  # }
-
 
   flog.info("Estimating %s clusters for suffix %s", nclus, suffix)
   if (opts$misc$grouping_var == "wages") {
@@ -855,8 +831,6 @@ Do.jdata_sdata.cluster.run_multiple <- function(cluster.set, suffix, opts) {
     lapply(cluster.set, Do.jdata_sdata.cluster, suffix = suffix, opts = opts)
   }
 }
-
-
 
 
 # ---COMBINED ESTIMATION CALLS ----
@@ -1012,9 +986,7 @@ Do.AKM.estimate.noIO <- function(ad) {
 
   return(long_data)
 }
-
-
-
+                           
 
 #' run AKM
 #' @export
@@ -1138,17 +1110,6 @@ Do.CRE.estimate <- function(suffix = "", opts) {
   ad <- Do.reading.jdata_sdata(directory_Data = opts$paths$data, suffix = suffix, data_type = opts$loading$data_type, opts)
 
   flog.info("[Do.CRE] running linear.cre for suffix %s", suffix)
-  # cre.sub <- c(0,0)
-  # if(opts$misc$cre.sub){
-  #   flog.info("[Do.CRE] subsampling in CRE")
-  #   cre.sub <- c(50,1000)
-  # }
-  # if(opts$misc$posterior_var){
-  #   flog.info("[Do.CRE] opts$misc$posterior_var=TRUE, so posterior variance will be estimated.")
-  # } else {
-  #   flog.info("[Do.CRE] opts$misc$posterior_var=FALSE, so posterior variance will NOT be estimated.")
-  # }
-  # cre_res = m2.mini.estimate(jdata=ad$jdata,sdata=ad$sdata,method="linear.cre", cre.sub=cre.sub, include_covY1_terms=FALSE, posterior_var=opts$misc$posterior_var)
   cre_res <- m2.cre.estimate(ad)
   filename <- sprintf("%scre_%s.rds", opts$paths$res, suffix)
   flog.info("[Do.CRE] exporting linear.cre results for %s (%s)", suffix, filename)
@@ -1206,30 +1167,12 @@ Do.AKM.stats <- function(long_data, suffix) {
 #' CRE stats
 #' @export
 Do.CRE.stats <- function(all) {
-  # all[,psi_var := cov_dYm_dYmc]
-  # all[,eps_var := 0.5*var_dYm - psi_var]
-  # all[,x_var   := var_Y1s - psi_var - eps_var]
-  #
-  # r = with(all,data.table(
-  #   method          = "CRE",
-  #   psi_var         = wt.var(psi1,N) + wt.mean(psi_var,N),
-  #   x_var           = wt.var(Em,N)   + wt.mean(x_var,N),
-  #   psi_x_cov       = wt.cov(psi1,Em,N),
-  #   residual_var    = wt.mean(eps_var,N),
-  #   x_within_var    = wt.mean(x_var,N),
-  #   segregation_var = wt.var(Em,N)))
-  #
-  # r$psi_x_cor = with(r, psi_x_cov/(sqrt(psi_var * x_var)))
-  # r$total_between_var = with(r, psi_var + 2*psi_x_cov + segregation_var)
-  # r$total_within_var = with(r, x_within_var + residual_var)
-  # r$total_var = with(r, total_between_var + total_within_var)
-
+  
   r <- data.table(
     method          = "CRE",
     psi_var         = all$vdec$var_psi,
     psi_x_cov       = all$vdec$cov_alpha_psi
   )
-
 
   return(r)
 }
@@ -1263,12 +1206,6 @@ Do.CRE0.stats <- function(res) {
 #' @export
 Do.CRE_both.stats <- function(cre_both_res, suffix, posterior_var = opts$misc$posterior_var) {
   stats <- Do.CRE.stats(cre_both_res)
-  # cre_res <- Do.CRE.stats(cre_both_res$cre$all)
-  # cre0_res <- Do.CRE0.stats(cre_both_res)
-  # if(posterior_var){
-  #   cre_res$posterior_var <- cre_both_res$cre$posterior_var
-  # }
-  # stats <- rbindlist(list(cre0_res,cre_res),use.names=T,fill=T)
   stats$suffix <- suffix
   return(stats)
 }
@@ -1731,7 +1668,6 @@ Do.Sample.Counts <- function(opts) {
     ad <- Do.reading.jdata_sdata(directory_Data = opts$paths$data, suffix = suffix, data_type = opts$loading$data_type, opts)
 
     # main descriptives
-    #    desc <- Do.Sample.Stats(ad,suffix)
     desc <- Do.Sample.Stats.extended(ad, suffix)
 
     desc_all <- rbind(desc_all, desc)
