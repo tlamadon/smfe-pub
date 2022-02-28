@@ -350,19 +350,19 @@ Do.load.raw.data <- function(opts) {
 
   # Norway (NO) -----------------------
   if (opts$country %in% c("NO", "NO3thresh")) {
-    wdata <- setDT(readRDS(file = "/ssb/stamme01/swp/lae/wk48/labor/data/data_0926.rds"))
+    wdata <- setDT(readRDS(file = "~/swp/lae/wk48/labor/data/data_0926.rds"))
     if (opts$country == "NO3thresh") {
       wdata <- wdata[year %in% c(2, 3, 4)]
     }
   }
   if (opts$country %in% c("NO-hourlywage", "NO3thresh-hourlywage")) {
-    wdata <- setDT(readRDS(file = "/ssb/stamme01/swp/lae/wk48/labor/data/data_0926_hourlywage.rds"))
+    wdata <- setDT(readRDS(file = "~/swp/lae/wk48/labor/data/data_0926_hourlywage.rds"))
     if (opts$country == "NO3thresh-hourlywage") {
       wdata <- wdata[year %in% c(2, 3, 4)]
     }
   }
   if (opts$country %in% c("NO6thresh-annualearnings", "NO3thresh-annualearnings")) {
-    wdata <- setDT(readRDS(file = "/ssb/stamme01/swp/lae/wk48/labor/data/data_0926_annualearnings.rds"))
+    wdata <- setDT(readRDS(file = "~/swp/lae/wk48/labor/data/data_0926_annualearnings.rds"))
     if (opts$country == "NO3thresh-annualearnings") {
       wdata <- wdata[year %in% c(2, 3, 4)]
     }

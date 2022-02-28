@@ -95,7 +95,7 @@ Do.Country.Paths <- function(country){
 
   # AT, IT-------------------------------------------------------
   if  (grepl('AT', country) | grepl('IT', country)){
-    proj_path<-"/mnt/ide0/home/kholzheu/smfe/"
+    proj_path<-"~/smfe/"
     if (grepl('IT', country)) {
        paths$raw<-paste0(proj_path, "/Data_IT/1985_2001_veneto.dta")
        if (grepl('ITKline', country)) {
@@ -127,50 +127,44 @@ Do.Country.Paths <- function(country){
   }
 
   # NO------------------------------------------------------------------------
-  if (country=='NO'){
-    paths$data  <- "/ssb/stamme01/swp/lae/wk48/labor/temp/"
-    paths$res   <- "/ssb/stamme01/swp/lae/wk48/labor/estimates/"
-    paths$final <- "/ssb/stamme01/swp/lae/wk48/labor/results/"
-    paths$attrition <- "/ssb/stamme01/swp/lae/wk48/labor/attrition/"
+  if (country=='NO6thresh'){
+    paths$data  <- "~/labor/NO6thresh/temp/"
+    paths$res   <- "~/labor/NO6thresh/estimates/"
+    paths$final <- "~/labor/NO6thresh/results/"
+    paths$attrition <- "~/labor/NO6thresh/attrition/"
   }
   if (country=='NO3thresh'){
-    dir.create(file.path("/ssb/stamme01/swp/lae/wk48/labor/NO3thresh/"), showWarnings = FALSE)
-    paths$data  <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh/temp/"
-    paths$res   <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh/estimates/"
-    paths$final <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh/results/"
-    paths$attrition <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh/attrition/"
+    dir.create(file.path("~/labor/NO3thresh/"), showWarnings = FALSE)
+    paths$data  <- "~/labor/NO3thresh/temp/"
+    paths$res   <- "~/labor/NO3thresh/estimates/"
+    paths$final <- "~/labor/NO3thresh/results/"
+    paths$attrition <- "~/labor/NO3thresh/attrition/"
   }
-  if (country=='NO-hourlywage'){
-    paths$data  <- "/ssb/stamme01/swp/lae/wk48/labor/hourlywage/temp/"
-    paths$res   <- "/ssb/stamme01/swp/lae/wk48/labor/hourlywage/estimates/"
-    paths$final <- "/ssb/stamme01/swp/lae/wk48/labor/hourlywage/results/"
-    paths$attrition <- "/ssb/stamme01/swp/lae/wk48/labor/hourlywage/attrition/"
+  if (country=='NO6thresh-hourlywage'){
+    paths$data  <- "~/labor/NO6thresh_hourlywage/temp/"
+    paths$res   <- "~/labor/NO6thresh_hourlywage/estimates/"
+    paths$final <- "~/labor/NO6thresh_hourlywage/results/"
+    paths$attrition <- "~/labor/NO6thresh_hourlywage/attrition/"
   }
   if (country=='NO3thresh-hourlywage'){
-    dir.create(file.path("/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_hourlywage/"), showWarnings = FALSE)
-    paths$data  <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_hourlywage/temp/"
-    paths$res   <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_hourlywage/estimates/"
-    paths$final <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_hourlywage/results/"
-    paths$attrition <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_hourlywage/attrition/"
+    dir.create(file.path("~/labor/NO3thresh_hourlywage/"), showWarnings = FALSE)
+    paths$data  <- "~/labor/NO3thresh_hourlywage/temp/"
+    paths$res   <- "~/labor/NO3thresh_hourlywage/estimates/"
+    paths$final <- "~/labor/NO3thresh_hourlywage/results/"
+    paths$attrition <- "~/labor/NO3thresh_hourlywage/attrition/"
   }
   if (country=='NO6thresh-annualearnings'){
-    paths$data  <- "/ssb/stamme01/swp/lae/wk48/labor/NO6thresh_annualearnings/temp/"
-    paths$res   <- "/ssb/stamme01/swp/lae/wk48/labor/NO6thresh_annualearnings/estimates/"
-    paths$final <- "/ssb/stamme01/swp/lae/wk48/labor/NO6thresh_annualearnings/results/"
-    paths$attrition <- "/ssb/stamme01/swp/lae/wk48/labor/NO6thresh_annualearnings/attrition/"
+    paths$data  <- "~/labor/NO6thresh_annualearnings/temp/"
+    paths$res   <- "~/labor/NO6thresh_annualearnings/estimates/"
+    paths$final <- "~/labor/NO6thresh_annualearnings/results/"
+    paths$attrition <- "~/labor/NO6thresh_annualearnings/attrition/"
   }
   if (country=='NO3thresh-annualearnings'){
-    dir.create(file.path("/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_annualearnings/"), showWarnings = FALSE)
-    paths$data  <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_annualearnings/temp/"
-    paths$res   <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_annualearnings/estimates/"
-    paths$final <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_annualearnings/results/"
-    paths$attrition <- "/ssb/stamme01/swp/lae/wk48/labor/NO3thresh_annualearnings/attrition/"
-  }
-  if (country=='NO6brad-annualearnings'){
-    paths$data  <- "/ssb/stamme01/swp/bjs/wk24/private/BHLMMS/NO6brad_annualearnings/jdata_sdata/"
-    paths$res   <- "/ssb/stamme01/swp/bjs/wk24/private/BHLMMS/NO6brad_annualearnings/intermediate_output/"
-    paths$final <- "/ssb/stamme01/swp/bjs/wk24/private/BHLMMS/NO6brad_annualearnings/final_output/"
-    paths$attrition <- "/ssb/stamme01/swp/bjs/wk24/private/BHLMMS/NO6brad_annualearnings/attrition/"
+    dir.create(file.path("~/labor/NO3thresh_annualearnings/"), showWarnings = FALSE)
+    paths$data  <- "~/labor/NO3thresh_annualearnings/temp/"
+    paths$res   <- "~/labor/NO3thresh_annualearnings/estimates/"
+    paths$final <- "~/labor/NO3thresh_annualearnings/results/"
+    paths$attrition <- "~/labor/NO3thresh_annualearnings/attrition/"
   }
 
 
