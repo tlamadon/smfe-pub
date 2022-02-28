@@ -128,6 +128,7 @@ Do.Country.Paths <- function(country){
 
   # NO------------------------------------------------------------------------
   if (country=='NO6thresh'){
+    dir.create(file.path("~/labor/NO6thresh/"), showWarnings = FALSE)
     paths$data  <- "~/labor/NO6thresh/temp/"
     paths$res   <- "~/labor/NO6thresh/estimates/"
     paths$final <- "~/labor/NO6thresh/results/"
@@ -141,6 +142,7 @@ Do.Country.Paths <- function(country){
     paths$attrition <- "~/labor/NO3thresh/attrition/"
   }
   if (country=='NO6thresh-hourlywage'){
+    dir.create(file.path("~/labor/NO6thresh-hourlywage/"), showWarnings = FALSE)
     paths$data  <- "~/labor/NO6thresh_hourlywage/temp/"
     paths$res   <- "~/labor/NO6thresh_hourlywage/estimates/"
     paths$final <- "~/labor/NO6thresh_hourlywage/results/"
@@ -154,6 +156,7 @@ Do.Country.Paths <- function(country){
     paths$attrition <- "~/labor/NO3thresh_hourlywage/attrition/"
   }
   if (country=='NO6thresh-annualearnings'){
+    dir.create(file.path("~/labor/NO6thresh-annualearnings/"), showWarnings = FALSE)
     paths$data  <- "~/labor/NO6thresh_annualearnings/temp/"
     paths$res   <- "~/labor/NO6thresh_annualearnings/estimates/"
     paths$final <- "~/labor/NO6thresh_annualearnings/results/"
