@@ -276,7 +276,7 @@ Do.load.raw.data <- function(opts) {
     # Loading data
     dta <- read_dta(opts$paths$raw)
     df <- setDT(dta)
-    df <- df[, list(sex = df$sex, days_worked = df$days_worked, worker_ID = df$cod_pgr, year = df$anno, firm_ID = df$matr_az, age = df$age, wages = df$lwage)]
+    df <- df[, list(days_worked = df$days_worked, worker_ID = df$cod_pgr, year = df$anno, firm_ID = df$matr_az, age = df$age, wages = df$lwage)]
     wdata %<>% rbind(df)
     wdata <- wdata[(wdata$age >= 25) & (wdata$age <= 60)] # age limits as in US
     wdata$earnings <- exp(wdata$wages) * wdata$days_worked
@@ -286,6 +286,10 @@ Do.load.raw.data <- function(opts) {
       wdata <- wdata[(wdata$year >= 2010) & (wdata$year <= 2015)] # 6 years
     } else if (grepl("3", country)) {
       wdata <- wdata[(wdata$year >= 2013) & (wdata$year <= 2015)] # 3 years
+    }
+    #Full-Year Work
+    if (grepl('full', country)) {
+      wdata=wdata[wdata$days_worked>=365]
     }
     floor <- mean(wdata$earnings, na.rm = TRUE) * 0.325
     # Earnings Threshold
@@ -301,7 +305,7 @@ Do.load.raw.data <- function(opts) {
     # Loading data
     dta <- read_dta(opts$paths$raw)
     df <- setDT(dta)
-    df <- df[, list(female = df$female, days_worked = df$gior_r, worker_ID = df$id, year = df$year, firm_ID = df$firmid, age = df$age, wages = log(df$daily_wage), )]
+    df <- df[, list(days_worked = df$gior_r, worker_ID = df$id, year = df$year, firm_ID = df$firmid, age = df$age, wages = log(df$daily_wage))]
     wdata %<>% rbind(df)
     wdata <- wdata[(wdata$age >= 25) & (wdata$age <= 60)] # age restriction
     wdata <- wdata[(wdata$days_worked <= 366)] # cleaning data
@@ -312,6 +316,11 @@ Do.load.raw.data <- function(opts) {
       wdata <- wdata[(wdata$year >= 1996)] # 6 years
     } else if (grepl("3", country)) {
       wdata <- wdata[(wdata$year >= 1999)] # 3 years
+    }
+    #Full-Year Work
+    #Note: 312 days modal value
+    if (grepl('full', country)) {
+          wdata=wdata[wdata$days_worked>=312]
     }
     floor <- mean(wdata$earnings, na.rm = TRUE) * 0.325
     # Earnings Threshold
@@ -324,6 +333,7 @@ Do.load.raw.data <- function(opts) {
 
   # Italy for Kline et al sample (ITKline) ---------------
   if (grepl("ITKline", opts$country)) {
+    # Loading data
     dta <- read_dta(opts$paths$raw)
     # Keep only certain vars but keep data as is otherwise
     df <- dta[, (names(dta) %in% c("log_dailywages", "year", "id", "firmidnew", "age"))]
@@ -986,7 +996,7 @@ Do.AKM.estimate.noIO <- function(ad) {
 
   return(long_data)
 }
-                           
+
 
 #' run AKM
 #' @export
@@ -1167,7 +1177,7 @@ Do.AKM.stats <- function(long_data, suffix) {
 #' CRE stats
 #' @export
 Do.CRE.stats <- function(all) {
-  
+
   r <- data.table(
     method          = "CRE",
     psi_var         = all$vdec$var_psi,

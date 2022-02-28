@@ -95,18 +95,16 @@ Do.Country.Paths <- function(country){
 
   # AT, IT-------------------------------------------------------
   if  (grepl('AT', country) | grepl('IT', country)){
-    path<-"/mnt/ide0/home/kholzheu/smfe/smfe/"
-    proj_path=dirname(path)
+    proj_path<-"/mnt/ide0/home/kholzheu/smfe/"
     if (grepl('IT', country)) {
        paths$raw<-paste0(proj_path, "/Data_IT/1985_2001_veneto.dta")
        if (grepl('ITKline', country)) {
-           paths$raw<-paste0(proj_path, "/Data_IT/All_Veneto_1999and2001_T_equal_2.dta") 
+           paths$raw<-paste0(proj_path, "/Data_IT/All_Veneto_1999and2001_T_equal_2.dta")
        }
-    } 
-    if (grepl('AT', country)) {
-       paths$raw<-paste0(proj_path, "/Data_AT/2001_2017_austria.dta")
     }
-    paths$prog  = paste0(proj_path, "/smfe/R/") #where the programs are in
+    if (grepl('AT', country)) {
+       paths$raw<-paste0(proj_path, "/Data_AT/2000_2017_austria.dta")
+    }
     paths$data  = paste0(proj_path,'/smfe-res-',country, '/')
     paths$res   = paths$data
     paths$final = paths$data
