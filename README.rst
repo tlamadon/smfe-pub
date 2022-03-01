@@ -1,11 +1,10 @@
 smfe-pub
 --------
 
-
-.. image:: https://anaconda.org/tlamadon/r-smfe/badges/version.svg
+.. image:: https://anaconda.org/tlamadon/r-smfe/badges/version.svg   
     :target: https://anaconda.org/tlamadon/r-smfe
 
-.. image:: https://anaconda.org/tlamadon/r-smfe/badges/platforms.svg
+.. image:: https://anaconda.org/tlamadon/r-smfe/badges/platforms.svg  
     :target: https://anaconda.org/tlamadon/r-smfe
 
 `smfe` is an R package used in following paper:
