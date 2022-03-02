@@ -370,7 +370,7 @@ Do.load.raw.data <- function(opts) {
 
   # Sweden (full sample) ---------------
   if (substr(opts$country, 1, 2) == "SW") {
-    load("L:\\Tibo\\qtrdata\\smfe-data-all.dat")
+    load("~/smfe-data-all.dat")
     wdata <- rdata
     rm(rdata)
     wdata <- wdata[!((wdata$wages == "NA") | (wdata$age == "NA") | (wdata$year == "NA") | (wdata$worker_ID == "NA") | (wdata$firm_ID == "NA")), ] # delete missing obs
@@ -380,7 +380,7 @@ Do.load.raw.data <- function(opts) {
   # Sweden (attrition sample)
   if (opts$country == "SW-attrition") {
     flog.info("loading swedish data for SW-attrition")
-    load("L:\\Tibo\\qtrdata\\smfe-data-all.dat")
+    load("~/smfe-data-all.dat")
     flog.info("done loading data.")
     wdata <- rdata
     rm(rdata)
